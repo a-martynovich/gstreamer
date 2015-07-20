@@ -44,9 +44,6 @@
 /* Extra platform specific plugin suffix */
 #undef GST_EXTRA_MODULE_SUFFIX
 
-/* macro to use to show function name */
-#undef GST_FUNCTION
-
 /* Defined if gcov is enabled to force a rebuild due to config.h changing */
 #undef GST_GCOV_ENABLED
 

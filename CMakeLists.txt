@@ -86,7 +86,8 @@ target_include_directories(gstreamer PUBLIC
     ${CMAKE_BINARY_DIR}
 )
 
-target_compile_definitions(gstreamer PUBLIC
+target_compile_definitions(gstreamer
+PUBLIC
     -DHAVE_CONFIG_H
     -DWIN32
     -DDISABLE_ORC
@@ -95,9 +96,10 @@ target_compile_definitions(gstreamer PUBLIC
     -DGST_DISABLE_XML
     -DHAVE_SINH
     -DHAVE_COSH
-    -DGST_EXPORTS
     -DGST_DISABLE_GST_DEBUG
     -DGST_DISABLE_PARSE
+PRIVATE
+    -DGST_EXPORTS
 )
 
 find_library(GLIB_LIBRARY glib ${DEPENDENCIES}/lib)
@@ -116,3 +118,30 @@ file(COPY win32/common/gstconfig.h DESTINATION ${CMAKE_BINARY_DIR}/gst)
 file(COPY win32/common/gstenumtypes.h DESTINATION ${CMAKE_BINARY_DIR}/gst)
 file(COPY win32/common/gstversion.h DESTINATION ${CMAKE_BINARY_DIR}/gst)
 file(COPY win32/common/config.h DESTINATION ${CMAKE_BINARY_DIR})
+
+add_library(gstbase SHARED
+    libs/gst/base/gstadapter.c
+    libs/gst/base/gstbaseparse.c
+    libs/gst/base/gstbasesink.c
+    libs/gst/base/gstbasesrc.c
+    libs/gst/base/gstbasetransform.c
+    libs/gst/base/gstbitreader.c
+    libs/gst/base/gstbytereader.c
+    libs/gst/base/gstbytewriter.c
+    libs/gst/base/gstcollectpads.c
+    libs/gst/base/gstdataqueue.c
+    libs/gst/base/gstflowcombiner.c
+    libs/gst/base/gstpushsrc.c
+    libs/gst/base/gstqueuearray.c
+    libs/gst/base/gsttypefindhelper.c
+
+    win32/common/libgstbase.def
+)
+
+target_include_directories(gstbase PRIVATE
+    libs
+)
+
+target_link_libraries(gstbase PUBLIC
+    gstreamer
+)
