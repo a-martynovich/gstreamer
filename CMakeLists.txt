@@ -145,3 +145,59 @@ target_include_directories(gstbase PRIVATE
 target_link_libraries(gstbase PUBLIC
     gstreamer
 )
+
+add_library(gstcoreelements SHARED
+    plugins/elements/gstcapsfilter.c
+    plugins/elements/gstconcat.c
+    plugins/elements/gstdownloadbuffer.c
+    plugins/elements/gstelements.c
+    plugins/elements/gstelements_private.c
+    plugins/elements/gstfakesrc.c
+    plugins/elements/gstfakesink.c
+    plugins/elements/gstfdsrc.c
+    plugins/elements/gstfdsink.c
+    plugins/elements/gstfilesink.c
+    plugins/elements/gstfilesrc.c
+    plugins/elements/gstfunnel.c
+    plugins/elements/gstidentity.c
+    plugins/elements/gstinputselector.c
+    plugins/elements/gstoutputselector.c
+    plugins/elements/gstmultiqueue.c
+    plugins/elements/gstqueue.c
+    plugins/elements/gstqueue2.c
+    plugins/elements/gstsparsefile.c
+    plugins/elements/gsttee.c
+    plugins/elements/gsttypefindelement.c
+    plugins/elements/gststreamiddemux.c
+    plugins/elements/gstvalve.c
+)
+
+target_include_directories(gstcoreelements PRIVATE
+    libs
+)
+
+target_link_libraries(gstcoreelements PUBLIC
+    gstreamer
+    gstbase
+)
+
+install(TARGETS gstreamer gstbase
+    RUNTIME DESTINATION bin
+)
+
+install(TARGETS gstcoreelements
+    RUNTIME DESTINATION bin/plugins
+)
+
+# TODO:
+#    gst-plugins-base/gst-libs/gst/app      libgstapp
+#    gst-plugins-base/gst-libs/gst/video    libgstvideo
+#    gst-plugins-base/app            libgstapp
+#    gst-plugins-base/videoconvert   libgstvideoconvert
+#    gst-plugins-base/videoscale     libgstvideoscale
+#
+#    gst-plugins-bad/autoconvert     libgstautoconvert
+#
+#    gst-plugins-good/ext/jpeg       libgstjpeg
+#    gst-plugins-good/videobox       libgstvideobox
+#    gst-plugins-good/videofilter    libgstvideofilter
