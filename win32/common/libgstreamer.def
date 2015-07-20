@@ -69,7 +69,7 @@ EXPORTS
 	_gst_tag_list_type DATA
 	_gst_toc_entry_type DATA
 	_gst_toc_type DATA
-	_gst_trace_mutex DATA
+	; _gst_trace_mutex DATA
 	_gst_value_array_type DATA
 	_gst_value_list_type DATA
 	gst_allocation_params_copy
@@ -114,7 +114,7 @@ EXPORTS
 	gst_bitmask_get_type
 	gst_buffer_add_meta
 	gst_buffer_add_parent_buffer_meta
-	gst_buffer_add_protection_meta
+	; gst_buffer_add_protection_meta
 	gst_buffer_append
 	gst_buffer_append_memory
 	gst_buffer_append_region
@@ -386,9 +386,9 @@ EXPORTS
 	gst_date_time_to_iso8601_string
 	gst_date_time_unref
 	gst_debug_add_log_function
-	gst_debug_bin_to_dot_data
-	gst_debug_bin_to_dot_file
-	gst_debug_bin_to_dot_file_with_ts
+	; gst_debug_bin_to_dot_data
+	; gst_debug_bin_to_dot_file
+	; gst_debug_bin_to_dot_file_with_ts
 	gst_debug_category_free
 	gst_debug_category_get_color
 	gst_debug_category_get_description
@@ -906,21 +906,21 @@ EXPORTS
 	gst_param_spec_fraction
 	gst_param_spec_fraction_get_type
 	gst_parent_buffer_meta_api_get_type
-	gst_parent_buffer_meta_debug DATA
+	; gst_parent_buffer_meta_debug DATA
 	gst_parent_buffer_meta_get_info
-	gst_parse_bin_from_description
-	gst_parse_bin_from_description_full
-	gst_parse_context_free
-	gst_parse_context_get_missing_elements
-	gst_parse_context_get_type
-	gst_parse_context_new
-	gst_parse_error_get_type
-	gst_parse_error_quark
-	gst_parse_flags_get_type
-	gst_parse_launch
-	gst_parse_launch_full
-	gst_parse_launchv
-	gst_parse_launchv_full
+	; gst_parse_bin_from_description
+	; gst_parse_bin_from_description_full
+	; gst_parse_context_free
+	; gst_parse_context_get_missing_elements
+	; gst_parse_context_get_type
+	; gst_parse_context_new
+	; gst_parse_error_get_type
+	; gst_parse_error_quark
+	; gst_parse_flags_get_type
+	; gst_parse_launch
+	; gst_parse_launch_full
+	; gst_parse_launchv
+	; gst_parse_launchv_full
 	gst_pipeline_auto_clock
 	gst_pipeline_flags_get_type
 	gst_pipeline_get_auto_flush_bus
@@ -1005,9 +1005,9 @@ EXPORTS
 	gst_preset_set_app_dir
 	gst_preset_set_meta
 	gst_progress_type_get_type
-	gst_protection_meta_api_get_type
-	gst_protection_meta_get_info
-	gst_protection_select_system
+	;gst_protection_meta_api_get_type
+	;gst_protection_meta_get_info
+	;gst_protection_select_system
 	gst_proxy_pad_chain_default
 	gst_proxy_pad_chain_list_default
 	gst_proxy_pad_get_internal

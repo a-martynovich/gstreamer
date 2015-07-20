@@ -38,7 +38,8 @@
 #undef GST_DISABLE_OPTION_PARSING
 
 /* Define if pipeline parsing code is disabled */
-#undef GST_DISABLE_PARSE
+#define GST_DISABLE_PARSE 1
+#define GST_DISABLE_TRACE 1
 
 /* Extra platform specific plugin suffix */
 #undef GST_EXTRA_MODULE_SUFFIX
@@ -501,7 +502,7 @@
 #undef STRUCT_TIMESPEC_DEFINITION_MISSING
 
 /* the target CPU */
-#undef TARGET_CPU
+#define TARGET_CPU "i686"
 
 /* Define if we should poison deallocated memory */
 #undef USE_POISONING
