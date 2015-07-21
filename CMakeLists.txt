@@ -138,7 +138,7 @@ add_library(gstbase SHARED
     win32/common/libgstbase.def
 )
 
-target_include_directories(gstbase PRIVATE
+target_include_directories(gstbase PUBLIC
     libs
 )
 
@@ -190,8 +190,8 @@ install(TARGETS gstcoreelements
 )
 
 # TODO:
-#    gst-plugins-base/gst-libs/gst/app      libgstapp
-#    gst-plugins-base/gst-libs/gst/video    libgstvideo
+#    gst-plugins-base/gst-libs/gst/app      libgstapp       +
+#    gst-plugins-base/gst-libs/gst/video    libgstvideo     +
 #    gst-plugins-base/app            libgstapp
 #    gst-plugins-base/videoconvert   libgstvideoconvert
 #    gst-plugins-base/videoscale     libgstvideoscale
@@ -201,3 +201,85 @@ install(TARGETS gstcoreelements
 #    gst-plugins-good/ext/jpeg       libgstjpeg
 #    gst-plugins-good/videobox       libgstvideobox
 #    gst-plugins-good/videofilter    libgstvideofilter
+#  ${CMAKE_BINARY_DIR}/gstapp-marshal.h
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/gstapp-marshal.h
+    COMMAND ${DEPENDENCIES}/bin/glib-genmarshal --header --prefix=__gst_app_marshal ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstapp-marshal.list > ${CMAKE_BINARY_DIR}/gstapp-marshal.h
+)
+
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/gstapp-marshal.c
+    COMMAND ${CMAKE_COMMAND} -E echo "#include <gstapp-marshal.h>" > ${CMAKE_BINARY_DIR}/gstapp-marshal.c
+    COMMAND ${DEPENDENCIES}/bin/glib-genmarshal --body --prefix=__gst_app_marshal ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstapp-marshal.list >> ${CMAKE_BINARY_DIR}/gstapp-marshal.c
+)
+
+add_library(app SHARED
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstappsrc.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstappsink.c
+
+    ${CMAKE_BINARY_DIR}/gstapp-marshal.h
+    ${CMAKE_BINARY_DIR}/gstapp-marshal.c
+
+    ${GST_PLUGINS_BASE_DIR}/win32/common/libgstapp.def
+)
+
+target_link_libraries(app PUBLIC
+    gstbase
+)
+
+add_library(video SHARED
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/colorbalance.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/colorbalancechannel.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/navigation.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-event.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-format.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-chroma.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-color.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-converter.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-dither.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-info.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-frame.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-scaler.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-tile.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideosink.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideofilter.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/convertframe.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideometa.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideopool.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/videoorientation.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/videooverlay.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideodecoder.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideoencoder.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideoutils.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideoutilsprivate.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-resampler.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-blend.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-overlay-composition.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-multiview.c
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-orc-dist.c
+    ${GST_PLUGINS_BASE_DIR}/win32/common/video-enumtypes.c
+)
+
+target_link_libraries(video PUBLIC
+    gstbase
+)
+
+configure_file(${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-orc-dist.h ${CMAKE_BINARY_DIR}/video-orc.h)
+configure_file(${GST_PLUGINS_BASE_DIR}/win32/common/video-enumtypes.h ${CMAKE_BINARY_DIR}/gst/video/video-enumtypes.h)
+
+target_include_directories(video PRIVATE
+    ${GST_PLUGINS_BASE_DIR}/gst-libs
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video
+)
+
+
+add_library(gstapp SHARED
+    ${GST_PLUGINS_BASE_DIR}/gst/app/gstapp.c
+)
+
+target_link_libraries(gstapp PUBLIC
+    app
+)
+
+target_include_directories(gstapp PRIVATE
+    ${GST_PLUGINS_BASE_DIR}/gst-libs
+)
