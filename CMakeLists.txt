@@ -77,9 +77,7 @@ add_library(gstreamer SHARED
 
 target_include_directories(gstreamer PUBLIC
     ${DEPENDENCIES}/include
-    ${GLIB_DIR}
-    ${GLIB_DIR}/glib
-    ${GLIB_DIR}/gmodule
+   ${DEPENDENCIES}/include/glib
     .
     gst
     win32/common
@@ -105,6 +103,7 @@ PRIVATE
 find_library(GLIB_LIBRARY glib ${DEPENDENCIES}/lib)
 find_library(GOBJECT_LIBRARY gobject ${DEPENDENCIES}/lib)
 find_library(GMODULE_LIBRARY gmodule ${DEPENDENCIES}/lib)
+find_library(JPEG_LIBRARY jpeg ${DEPENDENCIES}/lib)
 
 target_link_libraries(gstreamer PUBLIC
     ${GLIB_LIBRARY}
@@ -192,16 +191,16 @@ install(TARGETS gstcoreelements
 # TODO:
 #    gst-plugins-base/gst-libs/gst/app      libgstapp       +
 #    gst-plugins-base/gst-libs/gst/video    libgstvideo     +
-#    gst-plugins-base/app            libgstapp
-#    gst-plugins-base/videoconvert   libgstvideoconvert
-#    gst-plugins-base/videoscale     libgstvideoscale
+#    gst-plugins-base/app            libgstapp              +
+#    gst-plugins-base/videoconvert   libgstvideoconvert     +
+#    gst-plugins-base/videoscale     libgstvideoscale       +
 #
-#    gst-plugins-bad/autoconvert     libgstautoconvert
+#    gst-plugins-bad/autoconvert     libgstautoconvert      +
 #
-#    gst-plugins-good/ext/jpeg       libgstjpeg
-#    gst-plugins-good/videobox       libgstvideobox
-#    gst-plugins-good/videofilter    libgstvideofilter
-#  ${CMAKE_BINARY_DIR}/gstapp-marshal.h
+#    gst-plugins-good/ext/jpeg       libgstjpeg             +
+#    gst-plugins-good/videobox       libgstvideobox         +
+#    gst-plugins-good/videofilter    libgstvideofilter      +
+
 add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/gstapp-marshal.h
     COMMAND ${DEPENDENCIES}/bin/glib-genmarshal --header --prefix=__gst_app_marshal ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstapp-marshal.list > ${CMAKE_BINARY_DIR}/gstapp-marshal.h
 )
@@ -257,6 +256,8 @@ add_library(video SHARED
     ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-multiview.c
     ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-orc-dist.c
     ${GST_PLUGINS_BASE_DIR}/win32/common/video-enumtypes.c
+
+    ${GST_PLUGINS_BASE_DIR}/win32/common/libgstvideo.def
 )
 
 target_link_libraries(video PUBLIC
@@ -266,8 +267,10 @@ target_link_libraries(video PUBLIC
 configure_file(${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-orc-dist.h ${CMAKE_BINARY_DIR}/video-orc.h)
 configure_file(${GST_PLUGINS_BASE_DIR}/win32/common/video-enumtypes.h ${CMAKE_BINARY_DIR}/gst/video/video-enumtypes.h)
 
-target_include_directories(video PRIVATE
+target_include_directories(video
+PUBLIC
     ${GST_PLUGINS_BASE_DIR}/gst-libs
+PRIVATE
     ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video
 )
 
@@ -282,4 +285,67 @@ target_link_libraries(gstapp PUBLIC
 
 target_include_directories(gstapp PRIVATE
     ${GST_PLUGINS_BASE_DIR}/gst-libs
+)
+
+add_library(gstvideoconvert SHARED
+    ${GST_PLUGINS_BASE_DIR}/gst/videoconvert/gstvideoconvert.c
+)
+
+target_link_libraries(gstvideoconvert PUBLIC
+    video
+)
+
+target_include_directories(gstvideoconvert PRIVATE
+    ${GST_PLUGINS_BASE_DIR}/gst-libs
+)
+
+add_library(gstvideoscale SHARED
+    ${GST_PLUGINS_BASE_DIR}/gst/videoscale/gstvideoscale.c
+)
+
+target_link_libraries(gstvideoscale PUBLIC
+    video
+)
+
+add_library(gstautoconvert SHARED
+    ${GST_PLUGINS_BAD_DIR}/gst/autoconvert/gstautoconvert.c
+    ${GST_PLUGINS_BAD_DIR}/gst/autoconvert/gstautovideoconvert.c
+    ${GST_PLUGINS_BAD_DIR}/gst/autoconvert/plugin.c
+)
+
+target_link_libraries(gstautoconvert PUBLIC
+    video
+)
+
+add_library(gstjpeg SHARED
+    ${GST_PLUGINS_GOOD_DIR}/ext/jpeg/gstjpeg.c
+    ${GST_PLUGINS_GOOD_DIR}/ext/jpeg/gstjpegenc.c
+    ${GST_PLUGINS_GOOD_DIR}/ext/jpeg/gstjpegdec.c
+)
+
+target_link_libraries(gstjpeg PUBLIC
+    video
+    ${JPEG_LIBRARY}
+)
+
+add_library(gstvideobox SHARED
+    ${GST_PLUGINS_GOOD_DIR}/gst/videobox/gstvideobox.c
+    ${GST_PLUGINS_GOOD_DIR}/gst/videobox/gstvideoboxorc-dist.c
+)
+configure_file(${GST_PLUGINS_GOOD_DIR}/gst/videobox/gstvideoboxorc-dist.h ${CMAKE_BINARY_DIR}/gstvideoboxorc.h)
+
+target_link_libraries(gstvideobox PUBLIC
+    video
+)
+
+add_library(gstvideofilter SHARED
+    ${GST_PLUGINS_GOOD_DIR}/gst/videofilter/plugin.c
+    ${GST_PLUGINS_GOOD_DIR}/gst/videofilter/gstvideoflip.c
+    ${GST_PLUGINS_GOOD_DIR}/gst/videofilter/gstvideobalance.c
+    ${GST_PLUGINS_GOOD_DIR}/gst/videofilter/gstgamma.c
+    ${GST_PLUGINS_GOOD_DIR}/gst/videofilter/gstvideomedian.c
+)
+
+target_link_libraries(gstvideofilter PUBLIC
+    video
 )
