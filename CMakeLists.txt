@@ -180,14 +180,6 @@ target_link_libraries(gstcoreelements PUBLIC
     gstbase
 )
 
-install(TARGETS gstreamer gstbase
-    RUNTIME DESTINATION bin
-)
-
-install(TARGETS gstcoreelements
-    RUNTIME DESTINATION bin/plugins
-)
-
 # TODO:
 #    gst-plugins-base/gst-libs/gst/app      libgstapp       +
 #    gst-plugins-base/gst-libs/gst/video    libgstvideo     +
@@ -348,4 +340,153 @@ add_library(gstvideofilter SHARED
 
 target_link_libraries(gstvideofilter PUBLIC
     video
+)
+
+install(TARGETS
+        gstvideofilter
+        gstvideobox
+        gstautoconvert
+        gstvideoconvert
+        gstvideoscale
+        gstapp
+        gstcoreelements
+        gstjpeg
+RUNTIME DESTINATION bin/plugins
+)
+install(TARGETS app video gstreamer gstbase
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
+
+install(FILES
+    gst/gst.h
+    gst/glib-compat.h
+    gst/gstobject.h
+    gst/gstallocator.h
+    gst/gstbin.h
+    gst/gstbuffer.h
+    gst/gstbufferlist.h
+    gst/gstbufferpool.h
+    gst/gstbus.h
+    gst/gstcaps.h
+    gst/gstcapsfeatures.h
+    gst/gstchildproxy.h
+    gst/gstclock.h
+    gst/gstcompat.h
+    gst/gstcontext.h
+    gst/gstcontrolbinding.h
+    gst/gstcontrolsource.h
+    gst/gstdatetime.h
+    gst/gstdebugutils.h
+    gst/gstelement.h
+    gst/gstelementmetadata.h
+    gst/gstdevice.h
+    gst/gstdeviceprovider.h
+    gst/gstdeviceproviderfactory.h
+    gst/gstelementfactory.h
+    gst/gsterror.h
+    gst/gstevent.h
+    gst/gstformat.h
+    gst/gstghostpad.h
+    gst/gstdevicemonitor.h
+    gst/gstinfo.h
+    gst/gstiterator.h
+    gst/gstatomicqueue.h
+    gst/gstmacros.h
+    gst/gstmessage.h
+    gst/gstmeta.h
+    gst/gstmemory.h
+    gst/gstminiobject.h
+    gst/gstpad.h
+    gst/gstpadtemplate.h
+    gst/gstparamspecs.h
+    gst/gstpipeline.h
+    gst/gstplugin.h
+    gst/gstpluginfeature.h
+    gst/gstpoll.h
+    gst/gstpreset.h
+    gst/gstprotection.h
+    gst/gstquery.h
+    gst/gstsample.h
+    gst/gstsegment.h
+    gst/gststructure.h
+    gst/gstsystemclock.h
+    gst/gsttaglist.h
+    gst/gsttagsetter.h
+    gst/gsttask.h
+    gst/gsttaskpool.h
+    gst/gsttoc.h
+    gst/gsttocsetter.h
+    gst/gsttypefind.h
+    gst/gsttypefindfactory.h
+    gst/gsturi.h
+    gst/gstutils.h
+    gst/gstvalue.h
+    gst/gstregistry.h
+    gst/gstparse.h
+    ${CMAKE_BINARY_DIR}/gst/gstconfig.h
+    ${CMAKE_BINARY_DIR}/gst/gstenumtypes.h
+#    ${CMAKE_BINARY_DIR}/gst/config.h
+    ${CMAKE_BINARY_DIR}/gst/gstversion.h
+    DESTINATION include/gst
+)
+
+install(FILES
+    libs/gst/base/base.h
+    libs/gst/base/gstadapter.h
+    libs/gst/base/gstbaseparse.h
+    libs/gst/base/gstbasesink.h
+    libs/gst/base/gstbasesrc.h
+    libs/gst/base/gstbasetransform.h
+    libs/gst/base/gstbitreader.h
+    libs/gst/base/gstbytereader.h
+    libs/gst/base/gstbytewriter.h
+    libs/gst/base/gstcollectpads.h
+    libs/gst/base/gstdataqueue.h
+    libs/gst/base/gstflowcombiner.h
+    libs/gst/base/gstpushsrc.h
+    libs/gst/base/gstqueuearray.h
+    libs/gst/base/gsttypefindhelper.h
+    DESTINATION include/gst/base
+)
+
+install(FILES
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/app.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstappsrc.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/app/gstappsink.h
+    DESTINATION include/gst/app
+)
+
+install(FILES
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/colorbalance.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/colorbalancechannel.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/navigation.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-event.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-format.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-chroma.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-color.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-converter.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-dither.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-info.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-frame.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-scaler.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-tile.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideosink.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideofilter.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideometa.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideopool.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/videoorientation.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/videooverlay.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideodecoder.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideoencoder.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/gstvideoutils.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-resampler.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-blend.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-overlay-composition.h
+    ${GST_PLUGINS_BASE_DIR}/gst-libs/gst/video/video-multiview.h
+    ${CMAKE_BINARY_DIR}/gst/video/video-enumtypes.h
+#    ${CMAKE_BINARY_DIR}video-orc.h
+    DESTINATION include/gst/video
 )
